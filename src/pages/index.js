@@ -26,11 +26,11 @@ function HomePage({notes}){
   const [content,setContent] = useState('');
   const [noteId,setNoteId] = useState('');
   const [completed, setCompleted] = useState(false);
-  const editForm = (title, content, noteId)=>{
-    setVisibility(visibility => !visibility);
-    setTitle(title);
-    setContent(content);
-    setNoteId(noteId);
+  const editForm = (title, content, noteId) => {
+    setVisibility(visibility => !visibility)
+    setTitle(title)
+    setContent(content)
+    setNoteId(noteId)
   }
 
   const updateNote = async(noteId)=>{
@@ -45,7 +45,11 @@ function HomePage({notes}){
       window.location.reload(false);
     })
   }
-
+  const deleteNote = (noteId) => {
+    axios.delete(`/api/deleteNote?id=${noteId}`).then(() => {
+      window.location.reload(false)
+    })
+  }
   const toggleTodo = async(noteId)=>{
     const noteObj = {
       completed : !completed
@@ -73,9 +77,9 @@ function HomePage({notes}){
               <h3 style={{textDecoration: completed ? '':'line-through'}}>{note.title}</h3>
              <h3>{note.content}</h3>
               </div>
-             <button onClick={(title, content, noteId)=> editForm(note.title, note.content, note._id)} className='btn btn-warning m-1'>Edit</button>
-             <button className='btn btn-danger m-1'>Delete</button>
-             <button type='checkbox' onClick={()=> toggleTodo(noteId)}>completed</button>
+              <button onClick={(title, content, noteId)=>editForm(note.title, note.content, note._id)} className="btn btn-info">Edit</button>
+             <button onClick={() => deleteNote(note._id)}className='btn btn-danger m-1'>Delete</button>
+             {/* <button type='checkbox' onClick={()=> toggleTodo(noteId)}>completed</button> */}
              {visibility && <div>
                 <h2>Update now</h2>
                 <form >

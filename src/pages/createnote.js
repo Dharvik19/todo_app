@@ -5,11 +5,13 @@ const createnote=()=>{
 
   const [title,setTitle] = useState('');
   const [content,setContent] = useState('');
+  const [completed, setCompleted] = useState(false);
   const handleSubmit=(e)=>{
     e.preventDefault();
     const todoObj={
       title: title,
-      content: content
+      content: content,
+      completed: completed
     }
     // setTitle("");
     // setTodo('');
