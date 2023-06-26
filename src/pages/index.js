@@ -22,6 +22,7 @@ export async function getStaticProps(){
 function HomePage({notes}){
 
   const[visibility, setVisibility] = useState(false);
+  const[visibilityComp, setVisibilityComp] = useState(false);
   const [title,setTitle] = useState('');
   const [content,setContent] = useState('');
   const [noteId,setNoteId] = useState('');
@@ -69,12 +70,12 @@ function HomePage({notes}){
     <>
       <div  className='container'>
         <h1 className='mt-2 mb-2'>TO-dos</h1>
-        <ul style={{backgroundColor:"black",listStyle:"none", padding:"10px",borderRadius:"10px"}}>
+        {!visibilityComp && <ul style={{backgroundColor:"black",listStyle:"none", padding:"10px",borderRadius:"10px"}}>
         {notes.map((note,i)=>{
           return(
             <li key={i}style={{backgroundColor:"red",borderRadius:"10px",padding:"10px",marginBottom:"10px"}}>
               <div className='m-1'>
-              <h3 style={{textDecoration: completed ? '':'line-through'}}>{note.title}</h3>
+              <h3 >{note.title}</h3>
              <h3>{note.content}</h3>
               </div>
               <button onClick={(title, content, noteId)=>editForm(note.title, note.content, note._id)} className="btn btn-info">Edit</button>
@@ -99,7 +100,41 @@ function HomePage({notes}){
             </li>
           )
         })}
-        </ul>
+        </ul>}
+        <button onClick={()=>setVisibilityComp(visibilityComp => !visibilityComp)}>completed</button>
+        {visibilityComp && 
+           <ul style={{backgroundColor:"black",listStyle:"none", padding:"10px",borderRadius:"10px"}}>
+           {notes.filter((note)=>note.completed === 'true').map((note,i)=>{
+             return(
+               <li key={i}style={{backgroundColor:"red",borderRadius:"10px",padding:"10px",marginBottom:"10px"}}>
+                 <div className='m-1'>
+                 <h3 >{note.title}</h3>
+                <h3>{note.content}</h3>
+                 </div>
+                 <button onClick={(title, content, noteId)=>editForm(note.title, note.content, note._id)} className="btn btn-info">Edit</button>
+                <button onClick={() => deleteNote(note._id)}className='btn btn-danger m-1'>Delete</button>
+                {/* <button type='checkbox' onClick={()=> toggleTodo(noteId)}>completed</button> */}
+                {visibility && <div>
+                   <h2>Update now</h2>
+                   <form >
+             <div className="mb-3">
+               <label htmlFor="title" className="form-label">Title</label>
+               <input type="text" className="form-control" id="title" aria-describedby="emailHelp" onChange={(event)=>setTitle(event.target.value)}/>          
+             </div>
+             <div className="mb-3">
+               <label htmlFor="todo" className="form-label">Todo</label>
+               <input type="text" className="form-control" id="todo" aria-describedby="emailHelp"  onChange={(event)=>setContent(event.target.value)}/>          
+             </div>
+             <button type="submit" onClick={()=> updateNote(noteId)} className="btn btn-info">Edit</button>
+             <button type="submit" className="btn btn-danger">Cancel</button>
+           </form>
+                </div>
+                }
+               </li>
+             )
+           })}
+           </ul>
+        }
       </div>
     </>
   </Fragment>
